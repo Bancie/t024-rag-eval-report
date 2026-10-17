@@ -42,6 +42,38 @@ def _():
         return here
 
     REPORT_DIR = resolve_report_dir()
+
+    # molab mirrors only this single .py file from GitHub, so the data and results
+    # folders are fetched from the public repo when they are not next to the notebook.
+    RAW_BASE = "https://raw.githubusercontent.com/Bancie/t024-rag-eval-report/main/"
+    REMOTE_FILES = ['data/candidates.jsonl', 'data/generation_report.json', 'data/review_report.json', 'data/testset.jsonl', 'results/MANIFEST.md', 'results/section-accepted.jsonl', 'results/section-accepted.summary.json', 'results/sentence-accepted.jsonl', 'results/sentence-accepted.summary.json', 'results/testset_accepted.jsonl', 'results/top10/recall_curve.json', 'results/top10/section-top10.jsonl', 'results/top10/sentence-top10.jsonl', 'results/top10/window-top10.jsonl', 'results/window-accepted.jsonl', 'results/window-accepted.summary.json']
+
+    def ensure_remote_files(report_dir):
+        import tempfile
+        import urllib.request
+
+        if (report_dir / "data" / "testset.jsonl").is_file():
+            return report_dir
+        target = report_dir
+        try:
+            (target / "data").mkdir(parents=True, exist_ok=True)
+            (target / ".write_test").write_text("ok")
+            (target / ".write_test").unlink()
+        except OSError:
+            target = Path(tempfile.mkdtemp(prefix="t024_rag_eval_"))
+        for rel in REMOTE_FILES:
+            dest = target / rel
+            if dest.is_file():
+                continue
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                with urllib.request.urlopen(RAW_BASE + rel, timeout=30) as response:
+                    dest.write_bytes(response.read())
+            except Exception:
+                pass
+        return target
+
+    REPORT_DIR = ensure_remote_files(REPORT_DIR)
     DATA_DIR = REPORT_DIR / "data"
     RESULTS_DIR = REPORT_DIR / "results"
 
