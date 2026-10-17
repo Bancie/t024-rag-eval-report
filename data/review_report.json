@@ -1,0 +1,523 @@
+{
+  "counts": {
+    "accepted": 113,
+    "rejected": 64,
+    "candidate": 3
+  },
+  "per_reviewer": {
+    "chi": {
+      "tasks": 57,
+      "annotated": 57,
+      "remaining": 0,
+      "percent": 100.0,
+      "accept_votes": 34,
+      "reject_votes": 23
+    },
+    "nam": {
+      "tasks": 57,
+      "annotated": 57,
+      "remaining": 0,
+      "percent": 100.0,
+      "accept_votes": 41,
+      "reject_votes": 16
+    },
+    "thanh": {
+      "tasks": 57,
+      "annotated": 57,
+      "remaining": 0,
+      "percent": 100.0,
+      "accept_votes": 40,
+      "reject_votes": 17
+    },
+    "tien": {
+      "tasks": 57,
+      "annotated": 57,
+      "remaining": 0,
+      "percent": 100.0,
+      "accept_votes": 33,
+      "reject_votes": 24
+    }
+  },
+  "overlap": {
+    "size": 16,
+    "threshold": 3,
+    "panel": [
+      "chi",
+      "nam",
+      "thanh",
+      "tien"
+    ],
+    "votes": {
+      "nuimages-factual-008": {
+        "chi": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "nam": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        }
+      },
+      "nuimages-factual-010": {
+        "chi": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "nam": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        }
+      },
+      "nuimages-edge-case-008": {
+        "chi": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "nam": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        }
+      },
+      "nuimages-multi-section-011": {
+        "chi": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "nam": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Reject",
+          "span_ok": "Yes",
+          "vote": "reject",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        }
+      },
+      "nuimages-unanswerable-005": {
+        "chi": {
+          "question_ok": "Accept",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": "Câu hỏi bị gán nhãn sai thành unanswerable vì ngữ cảnh thực tế có chứa câu trả lời rõ ràng"
+        },
+        "nam": {
+          "question_ok": "Accept",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Accept",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        }
+      },
+      "nuimages-unanswerable-008": {
+        "chi": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "nam": {
+          "question_ok": "Accept",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Reject",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        }
+      },
+      "mapillary_vistas-factual-009": {
+        "chi": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "nam": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        }
+      },
+      "mapillary_vistas-edge-case-007": {
+        "chi": {
+          "question_ok": "Reject",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        },
+        "nam": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Reject",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        }
+      },
+      "mapillary_vistas-edge-case-009": {
+        "chi": {
+          "question_ok": "Reject",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        },
+        "nam": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Reject",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        }
+      },
+      "mapillary_vistas-multi-section-012": {
+        "chi": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "nam": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        }
+      },
+      "mapillary_vistas-unanswerable-006": {
+        "chi": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "nam": {
+          "question_ok": "Reject",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        }
+      },
+      "cityscapes-factual-003": {
+        "chi": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "nam": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        }
+      },
+      "cityscapes-edge-case-008": {
+        "chi": {
+          "question_ok": "Accept",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": "Đoạn tô vàng bôi nhầm sang phần của motorcycle và bị thiếu phần định nghĩa cho bicycle"
+        },
+        "nam": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Accept",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        }
+      },
+      "cityscapes-multi-section-002": {
+        "chi": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "nam": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        }
+      },
+      "cityscapes-multi-section-003": {
+        "chi": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "nam": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        }
+      },
+      "cityscapes-unanswerable-011": {
+        "chi": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "nam": {
+          "question_ok": "Reject",
+          "span_ok": "No",
+          "vote": "reject",
+          "note": ""
+        },
+        "thanh": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        },
+        "tien": {
+          "question_ok": "Accept",
+          "span_ok": "Yes",
+          "vote": "accept",
+          "note": ""
+        }
+      }
+    },
+    "needs_discussion": [
+      {
+        "id": "nuimages-unanswerable-008",
+        "accept_votes": 2,
+        "reject_votes": 2,
+        "missing": 0,
+        "reason": "insufficient_agreement"
+      },
+      {
+        "id": "mapillary_vistas-edge-case-007",
+        "accept_votes": 2,
+        "reject_votes": 2,
+        "missing": 0,
+        "reason": "insufficient_agreement"
+      },
+      {
+        "id": "cityscapes-edge-case-008",
+        "accept_votes": 2,
+        "reject_votes": 2,
+        "missing": 0,
+        "reason": "insufficient_agreement"
+      }
+    ]
+  },
+  "agreement": {
+    "question_ok": {
+      "pairwise_percent": {
+        "chi/nam": 75.0,
+        "chi/thanh": 87.5,
+        "chi/tien": 87.5,
+        "nam/thanh": 62.5,
+        "nam/tien": 87.5,
+        "thanh/tien": 75.0
+      },
+      "mean_pairwise_percent": 79.2,
+      "fleiss_kappa": 0.04761904761904745,
+      "n_overlap": 16,
+      "n_complete": 16
+    },
+    "span_ok": {
+      "pairwise_percent": {
+        "chi/nam": 62.5,
+        "chi/thanh": 93.8,
+        "chi/tien": 75.0,
+        "nam/thanh": 68.8,
+        "nam/tien": 62.5,
+        "thanh/tien": 68.8
+      },
+      "mean_pairwise_percent": 71.9,
+      "fleiss_kappa": 0.27909887359199,
+      "n_overlap": 16,
+      "n_complete": 16
+    }
+  },
+  "warnings": []
+}

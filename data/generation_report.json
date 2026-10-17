@@ -1,0 +1,27 @@
+{
+  "written": 180,
+  "span_check_failed": 0,
+  "repaired": 0,
+  "backend": "prompt",
+  "ragas_note": "Ragas TestsetGenerator.generate_with_chunks was invoked with the Modal Qwen chat model wrapped for LangChain and Qwen3-Embedding-0.6B on CPU. ragas 0.4.3 imports ChatVertexAI from a module langchain-community 0.4 removed; ragas_gen.py inserts a stand-in so the import can finish. This run does not call Vertex AI. The child then failed: rapidfuzz was missing, and after that package was installed the LangChain OpenAI client raised OpenAIConnectionError. The prompt generator wrote the same schema. Every non-empty gold_span in candidates.jsonl is a verbatim substring of the source text. Rows that failed JSON parsing, duplicated a question, or failed the span check were dropped before the file was written.",
+  "per_doc_written": {
+    "nuimages": {
+      "factual": 15,
+      "edge-case": 15,
+      "multi-section": 15,
+      "unanswerable": 15
+    },
+    "mapillary_vistas": {
+      "factual": 15,
+      "edge-case": 15,
+      "multi-section": 15,
+      "unanswerable": 15
+    },
+    "cityscapes": {
+      "factual": 15,
+      "edge-case": 15,
+      "multi-section": 15,
+      "unanswerable": 15
+    }
+  }
+}

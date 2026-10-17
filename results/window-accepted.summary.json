@@ -1,0 +1,108 @@
+{
+  "k_values": [
+    1,
+    3,
+    5,
+    10
+  ],
+  "n_questions": 113,
+  "n_scored": 82,
+  "n_unanswerable": 31,
+  "overall": {
+    "n": 113,
+    "n_scored": 82,
+    "mrr": 0.6548,
+    "recall": {
+      "1": 0.5732,
+      "3": 0.7073,
+      "5": 0.7683,
+      "10": 0.8537
+    }
+  },
+  "by_type": {
+    "edge-case": {
+      "n": 21,
+      "n_scored": 21,
+      "mrr": 0.6746,
+      "recall": {
+        "1": 0.619,
+        "3": 0.7143,
+        "5": 0.7619,
+        "10": 0.8571
+      }
+    },
+    "factual": {
+      "n": 32,
+      "n_scored": 32,
+      "mrr": 0.719,
+      "recall": {
+        "1": 0.6562,
+        "3": 0.7812,
+        "5": 0.8125,
+        "10": 0.875
+      }
+    },
+    "multi-section": {
+      "n": 29,
+      "n_scored": 29,
+      "mrr": 0.5695,
+      "recall": {
+        "1": 0.4483,
+        "3": 0.6207,
+        "5": 0.7241,
+        "10": 0.8276
+      }
+    },
+    "unanswerable": {
+      "n": 31,
+      "n_scored": 0,
+      "mrr": null,
+      "recall": {
+        "1": null,
+        "3": null,
+        "5": null,
+        "10": null
+      }
+    }
+  },
+  "by_doc_id": {
+    "cityscapes": {
+      "n": 35,
+      "n_scored": 23,
+      "mrr": 0.5848,
+      "recall": {
+        "1": 0.5217,
+        "3": 0.6087,
+        "5": 0.6957,
+        "10": 0.6957
+      }
+    },
+    "mapillary_vistas": {
+      "n": 39,
+      "n_scored": 26,
+      "mrr": 0.4766,
+      "recall": {
+        "1": 0.3462,
+        "3": 0.5769,
+        "5": 0.6538,
+        "10": 0.8077
+      }
+    },
+    "nuimages": {
+      "n": 39,
+      "n_scored": 33,
+      "mrr": 0.844,
+      "recall": {
+        "1": 0.7879,
+        "3": 0.8788,
+        "5": 0.9091,
+        "10": 1.0
+      }
+    }
+  },
+  "run_id": "window-accepted",
+  "chunker": "window",
+  "review_status": "reviewed",
+  "testset": "/workspace/rag-eval-run/source-tool/rag-eval/data/testset_accepted.jsonl",
+  "note": "Scored on questions whose status is accepted."
+}
