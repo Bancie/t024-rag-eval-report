@@ -1,0 +1,316 @@
+{
+  "k": 5,
+  "n_questions": 113,
+  "n_scored": 113,
+  "n_failed": 0,
+  "failed_ids": [],
+  "overall": {
+    "n": 113,
+    "n_scored": 113,
+    "n_chunks": 565,
+    "context_relevance_mean": 0.5611,
+    "context_relevance_mean_unit": 0.2805,
+    "context_relevance_mean_unrounded": 0.5610619469026549,
+    "judge_precision_at_k": 0.3947,
+    "judge_precision_at_k_unrounded": 0.3946902654867257,
+    "judge_strict_precision_at_k": 0.1664,
+    "judge_strict_precision_at_k_unrounded": 0.1663716814159292,
+    "answer_relevance_mean": 4.7611,
+    "answer_relevance_mean_unrounded": 4.761061946902655,
+    "refusal_rate": 0.3097,
+    "n_refused": 35
+  },
+  "by_type": {
+    "factual": {
+      "n": 32,
+      "n_scored": 32,
+      "n_chunks": 160,
+      "context_relevance_mean": 0.6312,
+      "context_relevance_mean_unit": 0.3156,
+      "context_relevance_mean_unrounded": 0.63125,
+      "judge_precision_at_k": 0.4313,
+      "judge_precision_at_k_unrounded": 0.43125,
+      "judge_strict_precision_at_k": 0.2,
+      "judge_strict_precision_at_k_unrounded": 0.2,
+      "answer_relevance_mean": 5.0,
+      "answer_relevance_mean_unrounded": 5.0,
+      "refusal_rate": 0.0312,
+      "n_refused": 1
+    },
+    "multi-section": {
+      "n": 29,
+      "n_scored": 29,
+      "n_chunks": 145,
+      "context_relevance_mean": 0.6069,
+      "context_relevance_mean_unit": 0.3034,
+      "context_relevance_mean_unrounded": 0.6068965517241379,
+      "judge_precision_at_k": 0.4138,
+      "judge_precision_at_k_unrounded": 0.41379310344827586,
+      "judge_strict_precision_at_k": 0.1931,
+      "judge_strict_precision_at_k_unrounded": 0.1931034482758621,
+      "answer_relevance_mean": 4.6897,
+      "answer_relevance_mean_unrounded": 4.689655172413793,
+      "refusal_rate": 0.1724,
+      "n_refused": 5
+    },
+    "edge-case": {
+      "n": 21,
+      "n_scored": 21,
+      "n_chunks": 105,
+      "context_relevance_mean": 0.6952,
+      "context_relevance_mean_unit": 0.3476,
+      "context_relevance_mean_unrounded": 0.6952380952380952,
+      "judge_precision_at_k": 0.4857,
+      "judge_precision_at_k_unrounded": 0.48571428571428565,
+      "judge_strict_precision_at_k": 0.2095,
+      "judge_strict_precision_at_k_unrounded": 0.20952380952380953,
+      "answer_relevance_mean": 4.8095,
+      "answer_relevance_mean_unrounded": 4.809523809523809,
+      "refusal_rate": 0.0476,
+      "n_refused": 1
+    },
+    "unanswerable": {
+      "n": 31,
+      "n_scored": 31,
+      "n_chunks": 155,
+      "context_relevance_mean": 0.3548,
+      "context_relevance_mean_unit": 0.1774,
+      "context_relevance_mean_unrounded": 0.3548387096774194,
+      "judge_precision_at_k": 0.2774,
+      "judge_precision_at_k_unrounded": 0.27741935483870966,
+      "judge_strict_precision_at_k": 0.0774,
+      "judge_strict_precision_at_k_unrounded": 0.0774193548387097,
+      "answer_relevance_mean": 4.5484,
+      "answer_relevance_mean_unrounded": 4.548387096774194,
+      "refusal_rate": 0.9032,
+      "n_refused": 28
+    }
+  },
+  "refusal": {
+    "n_unanswerable": 31,
+    "n_answerable": 82,
+    "n_correct_refusal": 28,
+    "n_false_refusal": 7,
+    "correct_refusal_rate": 0.9032,
+    "correct_refusal_rate_unrounded": 0.9032258064516129,
+    "false_refusal_rate": 0.0854,
+    "false_refusal_rate_unrounded": 0.08536585365853659
+  },
+  "agreement": {
+    "n_scored": 113,
+    "n_chunks": 565,
+    "context_score_exact_rate": 0.9929,
+    "context_score_exact_n": 561,
+    "answer_score_exact_rate": 0.9912,
+    "answer_score_exact_n": 112,
+    "answer_score_within_1_rate": 1.0,
+    "answer_score_within_1_n": 113,
+    "refusal_agreement_rate": 1.0,
+    "refusal_agreement_n": 113
+  },
+  "recall_comparison": {
+    "n_answerable_scored": 82,
+    "k_note": "gold_hit is span containment in the chunks the judge scored",
+    "fresh_recall_at_k": 0.9024,
+    "fresh_recall_at_k_unrounded": 0.9024390243902439,
+    "n_span_hit": 74,
+    "judge_hit_rate": 0.9634,
+    "both_positive": 73,
+    "span_hit_judge_not_strict": 1,
+    "span_miss_judge_strict": 6,
+    "both_negative": 2,
+    "span_hit_and_max_score_0": 0,
+    "span_miss_and_max_score_at_least_2": 6,
+    "published_n": 82,
+    "published_recall_at_k": 0.9024,
+    "published_vs_fresh_disagreements": 0,
+    "examples": {
+      "span_hit_judge_not_strict": [
+        {
+          "id": "cityscapes-edge-case-010",
+          "type": "edge-case",
+          "question": "How should an annotator handle cases where a human is inside a convertible car according to the annotation guidelines?",
+          "max_context_score": 1,
+          "gold_hit": true,
+          "published_hit": true,
+          "top_rank": 1,
+          "top_section": "human > rider",
+          "top_reason": "discusses humans in various vehicles including convertibles but does not specify annotation handling",
+          "top_snippet": "human > rider Humans relying on some device for movement. This includes drivers, passengers, or riders of bicycles, motorcycles, scooters, skateboards, horses, Segways, (inline) skates, wheelchairs, road cleaning cars, or convertibles. Note that a visible driver of a closed car..."
+        }
+      ],
+      "span_miss_judge_strict": [
+        {
+          "id": "cityscapes-edge-case-004",
+          "type": "edge-case",
+          "question": "When annotating a street scene, how should an annotator classify a van with a continuous body shape versus one that is not continuous?",
+          "max_context_score": 2,
+          "gold_hit": false,
+          "published_hit": false,
+          "top_rank": 1,
+          "top_section": "vehicle > car",
+          "top_reason": "directly defines classification for vans with continuous body shape",
+          "top_snippet": "vehicle > car This includes cars, jeeps, SUVs, vans with a continuous body shape (i.e. the driver?s cabin and cargo compartment are one). Does not include trailers, which have their own separate class."
+        },
+        {
+          "id": "cityscapes-factual-003",
+          "type": "factual",
+          "question": "Which vehicles are included in the truck category?",
+          "max_context_score": 2,
+          "gold_hit": false,
+          "published_hit": false,
+          "top_rank": 1,
+          "top_section": "vehicle > trailer",
+          "top_reason": "directly defines what is included in the truck category",
+          "top_snippet": "vehicle > trailer Includes trailers that can be attached to any vehicle, but excludes trailers attached to trucks. The latter are included in the truck label."
+        },
+        {
+          "id": "cityscapes-multi-section-006",
+          "type": "multi-section",
+          "question": "What types of vehicles are included in the category 'truck' according to the annotation guidelines?",
+          "max_context_score": 2,
+          "gold_hit": false,
+          "published_hit": false,
+          "top_rank": 1,
+          "top_section": "vehicle > trailer",
+          "top_reason": "directly defines the types of vehicles included in the 'truck' category",
+          "top_snippet": "vehicle > trailer Includes trailers that can be attached to any vehicle, but excludes trailers attached to trucks. The latter are included in the truck label."
+        }
+      ]
+    }
+  },
+  "examples": {
+    "answer_high": {
+      "id": "cityscapes-edge-case-002",
+      "type": "edge-case",
+      "question": "How does an annotator differentiate between a car and a trailer when annotating vehicles in a street scene?",
+      "answer": "When annotating vehicles in a street scene, an annotator should differentiate between a car and a trailer based on the following criteria: - Cars (including jeeps, SUVs, and vans with a continuous body shape) are included in the car class and do not include trailers. - Trailers are included in their own separate class. - Caravans containing living quarters have priority over the trailer class. Th...",
+      "score": 5,
+      "reason": "The answer directly addresses the question by providing clear criteria for differentiating between cars and trailers in a street scene annotation."
+    },
+    "answer_low": {
+      "id": "nuimages-multi-section-010",
+      "type": "multi-section",
+      "question": "What should not be done if an object is loosely covered by another object like branches or bushes?",
+      "answer": "If an object is loosely covered by another object like branches or bushes, do not create several polygons for visible areas that are less than 15 pixels in diameter.",
+      "score": 1,
+      "reason": "The answer provides specific advice that is not directly related to the question asked. The question asks what should not be done in a general sense, while the answer gives a very specific instruction about creating polygons, which is not clearly connected to handling objects covered by branches or bushes."
+    },
+    "context_high": {
+      "id": "cityscapes-edge-case-002",
+      "type": "edge-case",
+      "question": "How does an annotator differentiate between a car and a trailer when annotating vehicles in a street scene?",
+      "rank": 1,
+      "section_path": "vehicle > caravan",
+      "score": 2,
+      "reason": "directly defines what constitutes a car, distinguishing it from a trailer",
+      "gold_hit": false,
+      "snippet": "vehicle > caravan Vehicles that (appear to) contain living quarters. This also includes trailers that are used for living and has priority over the trailer class."
+    },
+    "context_low": {
+      "id": "cityscapes-edge-case-001",
+      "type": "edge-case",
+      "question": "How does an annotator differentiate between a truck and a bus according to the annotation guidelines? Is there any priority or exception mentioned for classifying these vehicles?",
+      "rank": 2,
+      "section_path": "Introduction",
+      "score": 0,
+      "reason": "the chunk discusses car classification which is not directly relevant to differentiating between trucks and buses",
+      "gold_hit": false,
+      "snippet": "Introduction The Cityscapes Dataset for Semantic Urban Scene Understanding ? SUPPLEMENTAL MATERIAL ? Marius Cordts1,2 Mohamed Omran3 Sebastian Ramos1,4 Timo Rehfeld1,2 Markus Enzweiler1 Rodrigo Benenson3 Uwe Franke1 Stefan Roth2 Bernt Schiele3 1Daimler AG R&D, 2TU Darmstadt, 3MP..."
+    },
+    "correct_refusal": {
+      "id": "cityscapes-unanswerable-002",
+      "type": "unanswerable",
+      "question": "Does a caravan have priority over all other vehicle classes?",
+      "answer": "A caravan that contains living quarters and is classified separately from its trailer has priority over the trailer class. However, the guideline does not explicitly state that a caravan has priority over all other vehicle classes.",
+      "refused": true,
+      "reason": "the guideline does not explicitly state that a caravan has priority over all other vehicle classes."
+    },
+    "missed_refusal": {
+      "id": "cityscapes-unanswerable-011",
+      "type": "unanswerable",
+      "question": "Are individuals using crutches or walking sticks considered part of the 'person' category?",
+      "answer": "Based on the provided chunks, individuals using crutches or walking sticks are considered part of the 'person' category. This is because they are described as humans primarily relying on their legs to move, even when using assistive devices.",
+      "refused": false,
+      "reason": "The answer provides a specific claim about individuals using crutches or walking sticks being part of the 'person' category."
+    },
+    "false_refusal": {
+      "id": "cityscapes-factual-013",
+      "type": "factual",
+      "question": "What is excluded from the road label if it is not delimited by road markings?",
+      "answer": "The guideline does not contain this information.",
+      "refused": true,
+      "reason": "The guideline does not contain this information."
+    }
+  },
+  "schema_version": 1,
+  "chunker": "section",
+  "generator_model": "Qwen/Qwen2.5-7B-Instruct",
+  "judge_model": "Qwen/Qwen2.5-32B-Instruct-AWQ",
+  "judge_base_url": "https://bancie--rag-eval-judge-vllm-serve.us-east.modal.run/v1",
+  "passes": 2,
+  "temperature": 0,
+  "rubric": {
+    "id": "context-0-2-answer-1-5-refusal-bool-v1",
+    "context_relevance": "Score each chunk on this scale. 0 = the chunk is not relevant to the question. 1 = the chunk is on the same topic but does not contain the information needed to answer. 2 = the chunk contains information that directly helps answer the question.",
+    "answer_relevance": "Score how directly the answer addresses the question, not whether it is factually correct. 1 = off-topic or empty. 2 = mentions the topic but does not answer the question. 3 = partial answer that misses the main point. 4 = addresses the question with a minor gap. 5 = directly addresses the question. A reply that says the guideline does not contain the information is addressing the question; do not mark that reply off-topic.",
+    "refusal": "refused is true only when the answer clearly says the guideline or the retrieved context does not contain the requested information (or that it cannot answer from the guideline) and does not also state a specific factual claim as the answer. refused is false when the answer states a specific claim, even if that claim might be wrong.",
+    "context_scale": "0-2",
+    "answer_scale": "1-5",
+    "refusal_scale": "boolean",
+    "precision_rule": "judge precision@k is the mean over questions of (chunks with score >= 1) / k. Missing ranks count as not relevant. Strict precision uses score == 2. Context relevance mean is the mean of chunk scores on the 0-2 scale."
+  },
+  "chunker_choice": {
+    "selected": "section",
+    "k": 5,
+    "candidates": {
+      "section": {
+        "recall_at_k": 0.9024,
+        "mrr": 0.7432
+      },
+      "window": {
+        "recall_at_k": 0.7805,
+        "mrr": 0.6568
+      },
+      "sentence": {
+        "recall_at_k": 0.7439,
+        "mrr": 0.6539
+      }
+    }
+  },
+  "cost_estimate_usd": {
+    "judge_billable_sec": 588.4902469400001,
+    "generator_billable_sec": 530.3833562599998,
+    "judge_usd": 0.5108422282465279,
+    "generator_usd": 0.14732871007222217,
+    "total_usd": 0.6581709383187501,
+    "judge_usd_per_hour": 2.5,
+    "generator_usd_per_hour": 0.8,
+    "overhead": 1.25,
+    "judge_scaledown_sec": 180,
+    "generator_scaledown_sec": 300,
+    "rates_note": "GPU-only list prices from modal.com/pricing (A100-80GB $2.50/h, L4 $0.80/h) times 1.25 for CPU and memory. This is an estimate from wall clock, not a Modal invoice.",
+    "pilot_projection_usd": 0.7569149886791932
+  },
+  "pilot": {
+    "n": 5,
+    "ids": [
+      "nuimages-factual-002",
+      "nuimages-multi-section-001",
+      "nuimages-edge-case-003",
+      "nuimages-unanswerable-002",
+      "nuimages-unanswerable-004"
+    ],
+    "judge_wall_sec": 15.056,
+    "generator_wall_sec": 4.31,
+    "projected_total_usd": 0.7569149886791932
+  },
+  "judge_app_stop": "exit 0: ",
+  "created_at": "2026-10-17T20:01:45Z",
+  "not_scored": [
+    "faithfulness",
+    "citation_recall",
+    "citation_precision",
+    "perceived_utility"
+  ]
+}

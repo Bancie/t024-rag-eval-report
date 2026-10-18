@@ -1,6 +1,6 @@
 # T024 RAG eval report
 
-Notebook marimo báo cáo đánh giá Retriever của doc-rag (recall@k, MRR) trên test set đã được người review. Notebook chỉ đọc file có sẵn trong repo, không gọi model, không dùng mạng.
+Notebook marimo báo cáo đánh giá Retriever của doc-rag (recall@k, MRR) trên test set đã được người review, cùng phần LLM-as-a-judge (context relevance, answer relevance, tỉ lệ từ chối) và biểu đồ. Notebook chỉ đọc file có sẵn trong repo, không gọi model; khi chạy trên molab nó tải dữ liệu và kết quả từ repo này qua mạng.
 
 ## Xem trên molab
 
@@ -19,8 +19,9 @@ marimo edit rag_eval_report.py
 ## Cấu trúc
 
 - `rag_eval_report.py` — notebook
+- `judge_plots.py` — hàm vẽ năm biểu đồ của phần LLM-as-a-judge (notebook import file này)
 - `data/` — test set đã review (`testset.jsonl`), `review_report.json`, `generation_report.json`, `candidates.jsonl`
-- `results/` — kết quả retrieval; các số recall@k và MRR trong báo cáo tính lại từ `results/top10/*-top10.jsonl`
+- `results/` — kết quả retrieval; các số recall@k và MRR trong báo cáo tính lại từ `results/top10/*-top10.jsonl`; `results/judge/` chứa `judge_summary.json` và `judge_results.jsonl` (113 câu accepted, judge Qwen2.5-32B-Instruct-AWQ)
 
 ## Đóng góp
 

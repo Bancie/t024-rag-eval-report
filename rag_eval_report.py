@@ -46,7 +46,7 @@ def _():
     # molab mirrors only this single .py file from GitHub, so the data and results
     # folders are fetched from the public repo when they are not next to the notebook.
     RAW_BASE = "https://raw.githubusercontent.com/Bancie/t024-rag-eval-report/main/"
-    REMOTE_FILES = ['data/candidates.jsonl', 'data/generation_report.json', 'data/review_report.json', 'data/testset.jsonl', 'results/MANIFEST.md', 'results/section-accepted.jsonl', 'results/section-accepted.summary.json', 'results/sentence-accepted.jsonl', 'results/sentence-accepted.summary.json', 'results/testset_accepted.jsonl', 'results/top10/recall_curve.json', 'results/top10/section-top10.jsonl', 'results/top10/sentence-top10.jsonl', 'results/top10/window-top10.jsonl', 'results/window-accepted.jsonl', 'results/window-accepted.summary.json']
+    REMOTE_FILES = ['data/candidates.jsonl', 'data/generation_report.json', 'data/review_report.json', 'data/testset.jsonl', 'results/MANIFEST.md', 'results/section-accepted.jsonl', 'results/section-accepted.summary.json', 'results/sentence-accepted.jsonl', 'results/sentence-accepted.summary.json', 'results/testset_accepted.jsonl', 'results/top10/recall_curve.json', 'results/top10/section-top10.jsonl', 'results/top10/sentence-top10.jsonl', 'results/top10/window-top10.jsonl', 'results/window-accepted.jsonl', 'results/window-accepted.summary.json', 'results/judge/judge_summary.json', 'results/judge/judge_results.jsonl', 'judge_plots.py']
 
     def ensure_remote_files(report_dir):
         import tempfile
@@ -180,6 +180,12 @@ def _():
                 _item["status"] = "accepted"
             _normalized.append(_item)
         top10_rows[_chunker] = _normalized
+
+    JUDGE_DIR = RESULTS_DIR / "judge"
+    judge_summary, _judge_summary_error = load_json(JUDGE_DIR / "judge_summary.json")
+    _record(load_notes, JUDGE_DIR / "judge_summary.json", _judge_summary_error)
+    judge_rows, _judge_rows_error = load_jsonl(JUDGE_DIR / "judge_results.jsonl")
+    _record(load_notes, JUDGE_DIR / "judge_results.jsonl", _judge_rows_error)
 
     def escape_text(value):
         return html_lib.escape("" if value is None else str(value))
@@ -1019,6 +1025,9 @@ def _():
         build_errors,
         top10_rows,
         recall_curve,
+        judge_summary,
+        judge_rows,
+        REPORT_DIR,
     )
 
 
@@ -1044,6 +1053,7 @@ def _(build_manifest, load_notes, manifest_text, md_fill, mo):
             - [Đường recall@k và các query ví dụ](#recallk-curve-and-example-queries) - recall@k với k = 1..10, và ba ví dụ của chunker section.
             - [Phân rã theo question type và doc](#breakdown-by-question-type-and-doc) - Cùng các metric trên các nhóm nhỏ hơn.
             - [Phân tích lỗi](#error-analysis) - Các miss, chỗ các chunker không khớp nhau, và các dòng cần xem lại.
+            - [LLM-as-a-judge](#llm-as-a-judge) - Context relevance, answer relevance, tỉ lệ từ chối, và biểu đồ.
             - [Kết luận](#conclusions) - Các con số đã tính nói lên điều gì.
             - [Hạn chế và bước tiếp theo](#limitations-and-next-steps) - Cỡ mẫu, kappa, và việc cần làm tiếp.
             """,
@@ -2821,6 +2831,354 @@ def _(
 def _(mo):
     mo.md(
         r"""
+        <a id="llm-as-a-judge"></a>
+
+        # LLM-as-a-judge
+        """
+    )
+    return
+
+
+@app.cell(hide_code=True)
+def _(REPORT_DIR, escape_text, fmt4, judge_rows, judge_summary, md_fill, md_table, mo):
+    def _num(block, key):
+        if not isinstance(block, dict):
+            return "—"
+        return fmt4(block.get(key))
+
+    def _text(value):
+        if value is None or value == "":
+            return "—"
+        return escape_text(value)
+
+    def _usd(value):
+        if value is None:
+            return "—"
+        return f"{float(value):.4f}"
+
+    def _answer_example(item, title):
+        if not isinstance(item, dict):
+            return "_" + title + ": không có trong summary._"
+        return (
+            "**"
+            + title
+            + "** `"
+            + _text(item.get("id"))
+            + "` ("
+            + _text(item.get("type"))
+            + "), điểm "
+            + _text(item.get("score"))
+            + ".\n\n"
+            + _text(item.get("question"))
+            + "\n\n"
+            + _text(item.get("answer"))
+            + "\n\nLý do của judge: "
+            + _text(item.get("reason"))
+        )
+
+    def _chunk_example(item, title):
+        if not isinstance(item, dict):
+            return "_" + title + ": không có trong summary._"
+        return (
+            "**"
+            + title
+            + "** `"
+            + _text(item.get("id"))
+            + "` rank "
+            + _text(item.get("rank"))
+            + ", điểm "
+            + _text(item.get("score"))
+            + ", gold_hit="
+            + _text(item.get("gold_hit"))
+            + ".\n\n"
+            + _text(item.get("snippet"))
+            + "\n\nLý do của judge: "
+            + _text(item.get("reason"))
+        )
+
+    def _refusal_example(item, title):
+        if not isinstance(item, dict):
+            return "_" + title + ": không có trong summary._"
+        return (
+            "**"
+            + title
+            + "** `"
+            + _text(item.get("id"))
+            + "` ("
+            + _text(item.get("type"))
+            + "), refused="
+            + _text(item.get("refused"))
+            + ".\n\n"
+            + _text(item.get("question"))
+            + "\n\n"
+            + _text(item.get("answer"))
+            + "\n\nLý do của judge: "
+            + _text(item.get("reason"))
+        )
+
+    def _disagree_lines(items):
+        if not items:
+            return "_Không có câu nào trong nhóm này._"
+        lines = []
+        for item in items:
+            lines.append(
+                "- `"
+                + _text(item.get("id"))
+                + "` ("
+                + _text(item.get("type"))
+                + "), max context score "
+                + _text(item.get("max_context_score"))
+                + ", gold_hit="
+                + _text(item.get("gold_hit"))
+                + ", published_hit="
+                + _text(item.get("published_hit"))
+                + ". Lý do ở rank "
+                + _text(item.get("top_rank"))
+                + ": "
+                + _text(item.get("top_reason"))
+            )
+        return "\n".join(lines)
+
+    def _render():
+        if not isinstance(judge_summary, dict):
+            return mo.md(
+                "**Thiếu file.** Phần này đọc `report/results/judge/judge_summary.json` và "
+                "`judge_results.jsonl`. Chưa có kết quả judge, nên chưa có context relevance, "
+                "answer relevance, hay tỉ lệ từ chối."
+            )
+        overall = judge_summary.get("overall") or {}
+        refusal = judge_summary.get("refusal") or {}
+        agreement = judge_summary.get("agreement") or {}
+        comparison = judge_summary.get("recall_comparison") or {}
+        choice = judge_summary.get("chunker_choice") or {}
+        rubric = judge_summary.get("rubric") or {}
+        cost = judge_summary.get("cost_estimate_usd") or {}
+        examples = judge_summary.get("examples") or {}
+        disagree = comparison.get("examples") or {}
+        headers = [
+            "nhóm",
+            "n",
+            "n_scored",
+            "context relevance (0-2)",
+            "context relevance (0-1)",
+            "precision@k",
+            "strict precision@k",
+            "answer relevance (1-5)",
+            "tỉ lệ từ chối",
+        ]
+        table_rows = [[
+            "overall",
+            overall.get("n"),
+            overall.get("n_scored"),
+            _num(overall, "context_relevance_mean"),
+            _num(overall, "context_relevance_mean_unit"),
+            _num(overall, "judge_precision_at_k"),
+            _num(overall, "judge_strict_precision_at_k"),
+            _num(overall, "answer_relevance_mean"),
+            _num(overall, "refusal_rate"),
+        ]]
+        for name, block in (judge_summary.get("by_type") or {}).items():
+            table_rows.append([
+                name,
+                block.get("n"),
+                block.get("n_scored"),
+                _num(block, "context_relevance_mean"),
+                _num(block, "context_relevance_mean_unit"),
+                _num(block, "judge_precision_at_k"),
+                _num(block, "judge_strict_precision_at_k"),
+                _num(block, "answer_relevance_mean"),
+                _num(block, "refusal_rate"),
+            ])
+        cand_rows = []
+        for name, block in (choice.get("candidates") or {}).items():
+            cand_rows.append([name, _num(block, "recall_at_k"), _num(block, "mrr")])
+        def _judge_plot_block():
+            missing = (
+                "**Thiếu file.** Phần này đọc `report/results/judge/judge_summary.json` và "
+                "`judge_results.jsonl`. Chưa có kết quả judge, nên chưa có context relevance, "
+                "answer relevance, hay tỉ lệ từ chối."
+            )
+            if not isinstance(judge_rows, list):
+                return mo.md(missing)
+            try:
+                import matplotlib.pyplot as plt
+
+                plt.rcParams["font.family"] = "DejaVu Sans"
+            except ImportError:
+                return mo.md("**Chưa cài matplotlib**, nên không vẽ được biểu đồ judge.")
+            import sys
+
+            report_dir = str(REPORT_DIR)
+            if report_dir not in sys.path:
+                sys.path.insert(0, report_dir)
+            from judge_plots import render_judge_plots
+
+            result = render_judge_plots(judge_summary, judge_rows)
+            if result.warning:
+                return mo.md(result.warning)
+            blocks = [
+                mo.md(
+                    "## Biểu đồ\n\n"
+                    "Năm biểu đồ dưới đây vẽ context relevance, answer relevance, refusal, "
+                    "span hit so với judge strict hit, và độ khớp giữa 2 lần chấm."
+                )
+            ]
+            for figure, caption in zip(result.figures, result.captions):
+                blocks.append(figure.gca())
+                blocks.append(mo.md(caption))
+            return mo.vstack(blocks)
+
+        fields = dict(
+            generator_model=judge_summary.get("generator_model"),
+            judge_model=judge_summary.get("judge_model"),
+            n_rows=len(judge_rows) if isinstance(judge_rows, list) else "—",
+            n_questions=judge_summary.get("n_questions"),
+            n_scored_all=judge_summary.get("n_scored"),
+            n_failed=judge_summary.get("n_failed"),
+            created_at=judge_summary.get("created_at"),
+            chunker=judge_summary.get("chunker"),
+            k=judge_summary.get("k"),
+            candidate_table=md_table(["chunker", "recall@k", "MRR"], cand_rows),
+            context_rubric=_text(rubric.get("context_relevance")),
+            answer_rubric=_text(rubric.get("answer_relevance")),
+            refusal_rubric=_text(rubric.get("refusal")),
+            precision_rule=_text(rubric.get("precision_rule")),
+            score_table=md_table(headers, table_rows),
+            correct=_num(refusal, "correct_refusal_rate"),
+            n_correct=refusal.get("n_correct_refusal"),
+            n_unanswerable=refusal.get("n_unanswerable"),
+            false_rate=_num(refusal, "false_refusal_rate"),
+            n_false=refusal.get("n_false_refusal"),
+            n_answerable=refusal.get("n_answerable"),
+            ctx_agree=_num(agreement, "context_score_exact_rate"),
+            ctx_hit=agreement.get("context_score_exact_n"),
+            ctx_chunks=agreement.get("n_chunks"),
+            ans_agree=_num(agreement, "answer_score_exact_rate"),
+            ans_hit=agreement.get("answer_score_exact_n"),
+            n_scored=agreement.get("n_scored"),
+            ans_within=_num(agreement, "answer_score_within_1_rate"),
+            ref_agree=_num(agreement, "refusal_agreement_rate"),
+            ref_hit=agreement.get("refusal_agreement_n"),
+            ex_answer_high=_answer_example(examples.get("answer_high"), "Answer relevance cao"),
+            ex_answer_low=_answer_example(examples.get("answer_low"), "Answer relevance thấp"),
+            ex_ctx_high=_chunk_example(examples.get("context_high"), "Context relevance cao"),
+            ex_ctx_low=_chunk_example(examples.get("context_low"), "Context relevance thấp"),
+            ex_correct=_refusal_example(examples.get("correct_refusal"), "Từ chối đúng"),
+            ex_missed=_refusal_example(examples.get("missed_refusal"), "Unanswerable nhưng không từ chối"),
+            ex_false=_refusal_example(examples.get("false_refusal"), "Từ chối nhầm"),
+            fresh_recall=_num(comparison, "fresh_recall_at_k"),
+            n_span=comparison.get("n_span_hit"),
+            n_answerable_scored=comparison.get("n_answerable_scored"),
+            published_recall=_num(comparison, "published_recall_at_k"),
+            published_n=comparison.get("published_n"),
+            drift=comparison.get("published_vs_fresh_disagreements"),
+            both_pos=comparison.get("both_positive"),
+            span_only=comparison.get("span_hit_judge_not_strict"),
+            judge_only=comparison.get("span_miss_judge_strict"),
+            both_neg=comparison.get("both_negative"),
+            span_zero=comparison.get("span_hit_and_max_score_0"),
+            span_only_examples=_disagree_lines(disagree.get("span_hit_judge_not_strict")),
+            judge_only_examples=_disagree_lines(disagree.get("span_miss_judge_strict")),
+            cost_usd=_usd(cost.get("total_usd")),
+            judge_usd=_usd(cost.get("judge_usd")),
+            generator_usd=_usd(cost.get("generator_usd")),
+            pilot_n=(judge_summary.get("pilot") or {}).get("n"),
+            pilot_usd=_usd((judge_summary.get("pilot") or {}).get("projected_total_usd")),
+            cost_note=_text(cost.get("rates_note"))
+        )
+        intro = md_fill(
+            """
+            Generator là `{generator_model}`. Judge là `{judge_model}`, temperature 0, hai lần trên cùng chunk và cùng câu trả lời. Judge không nhận gold span, reference answer, hay question type. File JSONL có {n_rows} dòng. Summary ghi {n_questions} câu, n_scored = {n_scored_all}, n_failed = {n_failed}. Thời điểm chạy: {created_at}.
+
+            Chunker của lần chạy này là `{chunker}`, k = {k}. Bảng sau là recall@k và MRR đã lưu trong summary, copy từ `recall_curve.json` lúc chạy. Chunker được chọn là chunker có MRR cao nhất.
+
+            {candidate_table}
+
+            k = 5 là độ sâu đưa vào generator. Báo cáo retrieval chấm k = 1, 3, 5 và 10.
+
+            ## Ba chỉ số
+
+            Context relevance chấm từng chunk trong top-k. Thang điểm ghi trong summary:
+
+            {context_rubric}
+
+            Context relevance trung bình là trung bình điểm các chunk trên thang 0-2. Cột 0-1 là trung bình đó chia 2. {precision_rule}
+
+            Answer relevance chấm câu trả lời có đúng trọng tâm câu hỏi không. Chỉ số này không phải faithfulness: một câu trả lời sai sự thật vẫn có thể điểm cao nếu nó nhằm vào câu hỏi. Câu nói guideline không có thông tin không bị tính là lạc đề.
+
+            {answer_rubric}
+
+            Refusal là quyết định của judge: câu trả lời có nói rõ guideline không chứa thông tin được hỏi hay không. Tỉ lệ từ chối đúng tính trên câu `type=unanswerable`. Tỉ lệ từ chối nhầm tính trên các câu còn lại, là những câu có đáp án.
+
+            {refusal_rubric}
+
+            Phần này không chấm faithfulness, citation recall, citation precision, hay perceived utility.
+
+            ## Điểm tổng và theo type
+
+            Cột "tỉ lệ từ chối" ở nhóm unanswerable là tỉ lệ từ chối đúng của nhóm đó. Ở các nhóm còn lại, đó là tỉ lệ từ chối nhầm trong nhóm.
+
+            {score_table}
+
+            Tỉ lệ từ chối đúng: {correct} ({n_correct}/{n_unanswerable}). Tỉ lệ từ chối nhầm: {false_rate} ({n_false}/{n_answerable}).
+
+            Biểu đồ ngay bên dưới vẽ các số của bảng này.
+""",
+            **fields,
+        )
+        rest = md_fill(
+            """
+            ## Độ nhiễu giữa hai lần chấm
+
+            Context score khớp: {ctx_agree} ({ctx_hit}/{ctx_chunks} chunk). Answer score khớp: {ans_agree} ({ans_hit}/{n_scored} câu). Answer score lệch tối đa 1 điểm: {ans_within}. Refusal khớp: {ref_agree} ({ref_hit}/{n_scored} câu).
+
+            ## Ví dụ điểm cao và điểm thấp
+
+            {ex_answer_high}
+
+            {ex_answer_low}
+
+            {ex_ctx_high}
+
+            {ex_ctx_low}
+
+            {ex_correct}
+
+            {ex_missed}
+
+            {ex_false}
+
+            ## So với recall@k
+
+            Recall dưới đây là span containment trên đúng các chunk judge đã đọc, không phải faithfulness. Fresh recall@{k} = {fresh_recall} ({n_span}/{n_answerable_scored} câu answerable được chấm).
+
+            Recall@{k} đã công bố của chunker này trong file top-10, trên những câu có mặt trong file đó: {published_recall} (n = {published_n}). Số câu answerable mà hit công bố và hit của lần retrieve này khác nhau: {drift}.
+
+            Judge tính một câu là hit nghiêm khi có ít nhất một chunk điểm 2. Cả hai cùng dương: {both_pos}. Span hit nhưng judge không cho điểm 2: {span_only}. Span miss nhưng judge cho điểm 2: {judge_only}. Cả hai cùng âm: {both_neg}. Span hit nhưng mọi chunk điểm 0: {span_zero}.
+
+            Span hit, judge không cho điểm 2:
+
+            {span_only_examples}
+
+            Span miss, judge cho điểm 2:
+
+            {judge_only_examples}
+
+            Pilot {pilot_n} câu dự đoán {pilot_usd} USD trước khi chạy cả bộ. Ước tính sau khi chạy, tính từ wall clock và giá niêm yết, là {cost_usd} USD (judge {judge_usd} USD, generator {generator_usd} USD). {cost_note}
+            
+""",
+            **fields,
+        )
+        return mo.vstack([intro, _judge_plot_block(), rest])
+
+    _render()
+    return
+
+
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md(
+        r"""
         <a id="conclusions"></a>
 
         # Kết luận
@@ -3070,7 +3428,39 @@ def _(
     summaries,
     testset,
     top10_rows,
+    judge_summary,
 ):
+    def _judge_limits():
+        if not isinstance(judge_summary, dict):
+            return (
+                "Phần LLM-as-a-judge chưa có file kết quả, nên báo cáo này chưa có "
+                "context relevance, answer relevance, hay tỉ lệ từ chối."
+            )
+        agreement = judge_summary.get("agreement") or {}
+        refusal = judge_summary.get("refusal") or {}
+        cost = judge_summary.get("cost_estimate_usd") or {}
+        total = cost.get("total_usd")
+        cost_text = "—" if total is None else f"{float(total):.4f}"
+        return (
+            "Judge cũng là một LLM ("
+            + str(judge_summary.get("judge_model"))
+            + "), nên điểm có thiên lệch của chính judge. Hai lần chấm trên cùng đầu ra khớp context score "
+            + fmt4(agreement.get("context_score_exact_rate"))
+            + ", answer score "
+            + fmt4(agreement.get("answer_score_exact_rate"))
+            + ", và refusal "
+            + fmt4(agreement.get("refusal_agreement_rate"))
+            + ". Bộ eval có "
+            + str(judge_summary.get("n_questions"))
+            + " câu, trong đó "
+            + str(refusal.get("n_unanswerable"))
+            + " câu unanswerable. Generator "
+            + str(judge_summary.get("generator_model"))
+            + " là model 7B, yếu hơn judge. Ước tính chi phí GPU của đợt này là "
+            + cost_text
+            + " USD, tính từ wall clock chứ không phải hóa đơn Modal. Không chấm faithfulness, citation, hay perceived utility."
+        )
+
     def _render():
         manifest = build_manifest(manifest_text)
         generation = build_generation(generation_report)
@@ -3144,6 +3534,7 @@ def _(
             - MANIFEST.md ghi ngày của snapshot summary trước đó ({date_detail}). recall@k và MRR trong báo cáo này được tính lại từ lần chạy top-10 sau đó.
             - {drift_note}
             - {discussion} câu vẫn nằm trong needs_discussion (`candidate`) và bị loại khỏi phần chấm cho đến khi reviewer chốt.
+            - {judge_limits}
             - Hướng cải thiện có thể làm: hybrid retrieval, reranker, thêm câu hỏi, và một vòng annotation thứ hai trên các dòng chưa chốt và các câu mọi chunker đều miss.
             """,
             n_scored=n_scored,
@@ -3162,6 +3553,7 @@ def _(
             date_detail=date_detail,
             discussion=discussion,
             drift_note=drift_note,
+            judge_limits=_judge_limits(),
         )
 
     _render()
